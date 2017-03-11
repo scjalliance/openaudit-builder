@@ -14,7 +14,7 @@
 
 function __oae.Usage {
 	echo ""
-	echo "usage: $0 <version> [destination]"
+	echo "usage: $0 <version> [destination] [gitbranch]"
 	echo ""
 	echo "  version:     'all' means to build all versions listed in versions.txt"
 	echo "               '1.2.3' means to build only version '1.2.3' (for example)"
