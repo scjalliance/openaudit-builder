@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# usage probably something like this:
+# ./build.sh 1.12.10.1 ../openaudit %V%
+# where ../openaudit is the scjalliance/openaudit repo
+
 function __oae.Usage {
 	echo ""
 	echo "usage: $0 <version> [destination]"
@@ -15,6 +19,7 @@ function __oae.Usage {
 	echo "  gitbranch:   Name of the git branch to use, if you wish to use git branches and have this script"
 	echo "               manage them.  If omitted, no git handling will be done at all."
 	echo "               If defined, destination must also be defined."
+	echo "               The string '%V%' will be replaced with the version value."
 	echo ""
 }
 
@@ -45,6 +50,7 @@ function __oae.PrepAndBuild {
 		__oae.Usage
 		exit 1
 	fi
+	B="$(echo "$B" | sed "s/%V%/$V/g")"
 	echo "$V = $D ($B)"
 	mkdir -p "$D"
 	__oae.Build "$S" "$V" "$D" "$B"
