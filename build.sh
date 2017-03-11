@@ -59,6 +59,7 @@ function __oae.Build {
 				git branch -D "$B"
 			fi
 		fi
+		git checkout -f master
 	fi
 	popd >/dev/null
 }
