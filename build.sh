@@ -4,6 +4,8 @@
 # ./build.sh all ../openaudit %V%
 #    ... or ...
 # ./build.sh 1.12.10.1 ../openaudit %V%
+#    ... or ...
+# ./build.sh $(tail -n1 versions.txt) ../openaudit latest
 # where ../openaudit is the scjalliance/openaudit repo
 
 function __oae.Usage {
@@ -46,7 +48,8 @@ function __oae.Build {
 	cat "$S/Dockerfile" | sed "s/%VERSION%/$V/g" > Dockerfile
 	cp -a "$S/run.sh" run.sh
 	rm -f build.okay
-	docker build -t "scjalliance/openaudit:$V" . && touch build.okay
+	TAG="${B:-$V}"
+	docker build -t "scjalliance/openaudit:$TAG" . && touch build.okay
 	if [ ! -z "$B" -a "$(git rev-parse --abbrev-ref HEAD)" == "$B" ]; then
 		if [ -f build.okay ]; then
 			git add .
