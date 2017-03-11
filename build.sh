@@ -23,10 +23,10 @@ function __oae.Build {
 	local V="$2"
 	local D="$3"
 	local B="$4"
-	cat Dockerfile | sed "s/%VERSION%/$V/g" > "$D/Dockerfile"
-	cp -a run.sh "$D/run.sh"
 	pushd "$D" >/dev/null
 	[ -z "$B" ] && (git checkout -b "$B" master || git checkout -f "$B") && git reset --hard || exit 1
+	cat "$S/Dockerfile" | sed "s/%VERSION%/$V/g" > Dockerfile
+	cp -a "$S/run.sh" run.sh
 	rm -f build.okay
 	docker build -t "scjalliance/openaudit:$V" . | tee build.log && touch build.okay
 	[ -f build.okay && -z "$B" ] && git add . && git commit -a -m "Build $V via build.sh"
@@ -66,7 +66,7 @@ if [ -z "$V" ]; then
 	__oae.Usage
 	exit 1
 else
-	if [ ! -z "$B" && -z "$D" ]; then
+	if [ ! -z "$B" -a -z "$D" ]; then
 		echo "If gitbranch is defined, destination must also be defined.  If you want localdir, use . instead."
 		__oae.Usage
 		exit 1
