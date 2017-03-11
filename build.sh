@@ -1,12 +1,16 @@
 #!/bin/bash
 
 # usage probably something like this:
+#
 # ./build.sh all ../openaudit %V%
 #    ... or ...
 # ./build.sh 1.12.10.1 ../openaudit %V%
 #    ... or ...
 # ./build.sh $(tail -n1 versions.txt) ../openaudit latest
-# where ../openaudit is the scjalliance/openaudit repo
+#    ... or maybe even ...
+# ./build.sh all ../openaudit %V%; ./build.sh $(tail -n1 versions.txt) ../openaudit latest
+#
+# (where ../openaudit is the scjalliance/openaudit repo)
 
 function __oae.Usage {
 	echo ""
