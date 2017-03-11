@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # usage probably something like this:
+# ./build.sh all ../openaudit %V%
+#    ... or ...
 # ./build.sh 1.12.10.1 ../openaudit %V%
 # where ../openaudit is the scjalliance/openaudit repo
 
