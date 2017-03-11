@@ -44,7 +44,7 @@ function __oae.Build {
 	cat "$S/Dockerfile" | sed "s/%VERSION%/$V/g" > Dockerfile
 	cp -a "$S/run.sh" run.sh
 	rm -f build.okay
-	docker build -t "scjalliance/openaudit:$V" . | tee build.log && touch build.okay
+	docker build -t "scjalliance/openaudit:$V" . && touch build.okay
 	if [ ! -z "$B" -a "$(git rev-parse --abbrev-ref HEAD)" == "$B" ]; then
 		if [ -f build.okay ]; then
 			git add .
