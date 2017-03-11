@@ -29,13 +29,37 @@ function __oae.Build {
 	local D="$3"
 	local B="$4"
 	pushd "$D" >/dev/null
-	[ ! -z "$B" ] && ((git checkout -b "$B" master || git checkout -f "$B") && (git reset --hard; git clean -df; git checkout -- .))
-	[ ! -z "$B" -a "$(git rev-parse --abbrev-ref HEAD)" != "$B" ] && echo "NOT IN EXPECTED BRANCH" && return
+	local BRANCHSTATE="$(git branch --list "$B" | grep "$B" && echo EXISTS)"
+	if [ ! -z "$B" ]; then
+		git branch | grep -e "\b$B\b"
+		git checkout -b "$B" master || git checkout -f "$B"
+		if [ "$(git rev-parse --abbrev-ref HEAD)" != "$B" ]; then
+			echo "NOT IN EXPECTED BRANCH"
+			return
+		fi
+		git reset --hard
+		git clean -df
+		git checkout -- .
+	fi
 	cat "$S/Dockerfile" | sed "s/%VERSION%/$V/g" > Dockerfile
 	cp -a "$S/run.sh" run.sh
 	rm -f build.okay
 	docker build -t "scjalliance/openaudit:$V" . | tee build.log && touch build.okay
-	[ -f build.okay -a ! -z "$B" -a "$(git rev-parse --abbrev-ref HEAD)" == "$B" ] && git add . && git commit -m "Build $V via build.sh"
+	if [ ! -z "$B" -a "$(git rev-parse --abbrev-ref HEAD)" == "$B" ]; then
+		if [ -f build.okay ]; then
+			git add .
+			git commit -m "Build $V via build.sh"
+		else
+			git reset --hard
+			git clean -df
+			git checkout -- .
+			if [ "$BRANCHSTATE" != "EXISTS" ]; then
+				# this branch didn't exist until now, so we will not keep it around
+				git checkout -f master
+				git branch -D "$B"
+			fi
+		fi
+	fi
 	popd >/dev/null
 }
 
