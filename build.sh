@@ -113,7 +113,7 @@ else
 		exit 1
 	fi
 	if [ "$V" == "all" ]; then
-		cat versions.txt | tac | while read Vi; do
+		cat versions.txt | egrep -v '^\s*(#.*)?$' | tac | while read Vi; do
 			Di="$(readlink -m "${D:-$S/..}/$Vi")"
 			[ ! -z "$B" ] && Di="$(readlink -m "$D")"
 			__oae.PrepAndBuild "$S" "$Vi" "$Di" "$B"

@@ -14,6 +14,7 @@ RUN echo "mysql-server mysql-server/root_password password $OPT_MROOTPWD" | debc
         ipmitool \
         libapache2-mod-php5 \
         libapache2-mod-proxy-html \
+        librrd4 \
         libtime-modules-perl \
         logrotate \
         mysql-server \
@@ -25,6 +26,7 @@ RUN echo "mysql-server mysql-server/root_password password $OPT_MROOTPWD" | debc
         php5-mcrypt \
         php5-mysql \
         php5-snmp \
+        rrdtool \
         screen \
         smbclient \
         sshpass \
